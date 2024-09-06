@@ -2,6 +2,8 @@ import puppeteer from "puppeteer";
 import _ from "lodash";
 import { getRandomCity } from "./a.js";
 import fs from "fs";
+import dotenv from "dotenv";
+dotenv.config();
 
 (async () => {
   const browser = await puppeteer.launch({ headless: false });
@@ -10,7 +12,7 @@ import fs from "fs";
     waitUntil: "networkidle0",
   });
   await page.type("#email", "tomasekerbenu@gmail.com");
-  await page.type("#password", "SuperSecret1234!");
+  await page.type("#password", process.env.PASSWORD);
   await page.evaluate(() => {
     const button = Array.from(document.querySelectorAll("button")).find((el) => el.innerText.trim() === "LOG IN");
     button?.click();
@@ -31,7 +33,7 @@ const getImage = async (city) => {
   const res = await (
     await fetch(`https://api.pexels.com/v1/search?query=${city}+sightseeing&per_page=5`, {
       headers: {
-        Authorization: "Fp9BbQfIayY37mjMADYmLc5JKsBlhvGoxApnKNGVMAkXtsHivkD9t8EP",
+        Authorization: process.env.PEXELS_API_KEY,
       },
     })
   ).json();

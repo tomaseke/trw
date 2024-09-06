@@ -1,6 +1,8 @@
 import Groq from "groq-sdk";
+import dotenv from "dotenv";
+dotenv.config();
 
-const groq = new Groq({ apiKey: "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" });
+const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
 export async function getRandomCity() {
   const chatCompletion = await getGroqChatCompletion();
