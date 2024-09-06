@@ -1,6 +1,5 @@
 import puppeteer from "puppeteer";
 import _ from "lodash";
-import { getRandomCity } from "./a.js";
 import fs from "fs";
 import dotenv from "dotenv";
 dotenv.config();
@@ -17,6 +16,9 @@ dotenv.config();
     const button = Array.from(document.querySelectorAll("button")).find((el) => el.innerText.trim() === "LOG IN");
     button?.click();
   });
+  await page.waitForNetworkIdle();
+  await page.goto("https://app.jointherealworld.com/chat/01GGDHJAQMA1D0VMK8WV22BJJN/01HTYZPR5T7REDAGHN618DQBN0");
+  await new Promise((resolve) => setTimeout(resolve, 5000));
   const city = await getRandomCity();
   const url = await getImage(city);
   const image = await (await fetch(url)).arrayBuffer();
@@ -41,4 +43,13 @@ const getImage = async (city) => {
   const filtered = res.photos.filter((e) => e.src);
   const url = filtered[_.random(filtered.length - 1)].src.original;
   return url;
+};
+
+const getRandomCity = async () => {
+  const cities = (await fs.promises.readFile(`./worldcities.csv`))
+    .toString()
+    .split("\n")
+    .map((e) => e.split(",")[0].replaceAll('"', ""));
+  console.log(2222);
+  return cities[_.random(cities.length - 1)];
 };
