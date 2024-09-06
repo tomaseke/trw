@@ -26,7 +26,8 @@ dotenv.config();
   await page.waitForSelector(inputFileSelector);
   const inputElement = await page.$(inputFileSelector);
   await inputElement.uploadFile(imagePath);
-//   await page.keyboard.press("Enter");
+  await page.type("#chat-input", city);
+  await page.keyboard.press("Enter");
 })();
 
 const getImage = async (city) => {
