@@ -1,0 +1,41 @@
+import puppeteer from "puppeteer";
+import _ from "lodash";
+import { getRandomCity } from "./a.js";
+import fs from "fs";
+
+(async () => {
+  const browser = await puppeteer.launch({ headless: false });
+  const page = await browser.newPage();
+  await page.goto("https://app.jointherealworld.com/auth/login", {
+    waitUntil: "networkidle0",
+  });
+  await page.type("#email", "tomasekerbenu@gmail.com");
+  await page.type("#password", "SuperSecret1234!");
+  await page.evaluate(() => {
+    const button = Array.from(document.querySelectorAll("button")).find((el) => el.innerText.trim() === "LOG IN");
+    button?.click();
+  });
+  const city = await getRandomCity();
+  const url = await getImage(city);
+  const image = await (await fetch(url)).arrayBuffer();
+  const imagePath = `/Users/cen55497/trw/cities/${city}_${new Date().toISOString()}.jpeg`;
+  fs.writeFileSync(imagePath, Buffer.from(image));
+  const inputFileSelector = 'input[type="file"]';
+  await page.waitForSelector(inputFileSelector);
+  const inputElement = await page.$(inputFileSelector);
+  await inputElement.uploadFile(imagePath);
+//   await page.keyboard.press("Enter");
+})();
+
+const getImage = async (city) => {
+  const res = await (
+    await fetch(`https://api.pexels.com/v1/search?query=${city}+sightseeing&per_page=5`, {
+      headers: {
+        Authorization: "Fp9BbQfIayY37mjMADYmLc5JKsBlhvGoxApnKNGVMAkXtsHivkD9t8EP",
+      },
+    })
+  ).json();
+  const filtered = res.photos.filter((e) => e.src);
+  const url = filtered[_.random(filtered.length - 1)].src.original;
+  return url;
+};
