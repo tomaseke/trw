@@ -30,9 +30,9 @@ const navigateToCampus = async (campus) => {
   await new Promise((resolve) => setTimeout(resolve, 5000));
 };
 
-const getImage = async (city) => {
+const getImage = async (query) => {
   const res = await (
-    await fetch(`https://api.pexels.com/v1/search?query=${city}+sightseeing&per_page=5`, {
+    await fetch(`https://api.pexels.com/v1/search?query=${query}&per_page=5`, {
       headers: {
         Authorization: process.env.PEXELS_API_KEY,
       },
@@ -54,7 +54,7 @@ const getRandomCity = async () => {
 const postTravelPic = async () => {
   await navigateToCampus("travel");
   const city = await getRandomCity();
-  const url = await getImage(city);
+  const url = await getImage(`${city}+sightseeing`);
   const image = await (await fetch(url)).arrayBuffer();
   const imagePath = `/Users/cen55497/trw/cities/${city}_${new Date().toISOString()}.jpeg`;
   fs.writeFileSync(imagePath, Buffer.from(image));
@@ -63,13 +63,13 @@ const postTravelPic = async () => {
   const inputElement = await page.$(inputFileSelector);
   await inputElement.uploadFile(imagePath);
   await page.type("#chat-input", city);
-  //   await page.keyboard.press("Enter");
+  await page.keyboard.press("Enter");
 };
 
 const sayGM = async () => {
   await navigateToCampus("gm");
   await page.type("#chat-input", "GM");
-  //   await page.keyboard.press("Enter");
+  await page.keyboard.press("Enter");
 };
 
 const main = async () => {
