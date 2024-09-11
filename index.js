@@ -14,6 +14,9 @@ const campuses = {
   }
 };
 
+  
+const wait = async (s) => new Promise((resolve) => setTimeout(resolve, s));
+
 const browser = await puppeteer.launch({ headless: false });
 const page = await browser.newPage();
 
@@ -32,7 +35,7 @@ const login = async () => {
 
 const navigateToCampus = async (campus, chat) => {
   await page.goto(`https://app.jointherealworld.com/chat${campuses[campus][chat]}`);
-  await new Promise((resolve) => setTimeout(resolve, 5000));
+  await wait(5000);
 };
 
 const getImage = async (query) => {
@@ -80,6 +83,7 @@ const sayGM = async () => {
 const main = async () => {
   await login();
   await postTravelPic();
+  await wait(5000);
   await sayGM();
 };
 
