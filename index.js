@@ -5,8 +5,13 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const campuses = {
-  travel: "/01GGDHJAQMA1D0VMK8WV22BJJN/01HTYZPR5T7REDAGHN618DQBN0",
-  gm: "/01GGDHJAQMA1D0VMK8WV22BJJN/01HK2B2DWW42VSZ4TZ59QSP7T2",
+  main: {
+    travel: "/01GGDHJAQMA1D0VMK8WV22BJJN/01HTYZPR5T7REDAGHN618DQBN0",
+    gm: "/01GGDHJAQMA1D0VMK8WV22BJJN/01HK2B2DWW42VSZ4TZ59QSP7T2",
+  },
+  cryptoTrading: {
+    gm: "/01GW4K82142Y9A465QDA3C7P44/01J1W6Z92FJPQQMPWHC2G16SWF"
+  }
 };
 
 const browser = await puppeteer.launch({ headless: false });
@@ -25,8 +30,8 @@ const login = async () => {
   await page.waitForNetworkIdle();
 };
 
-const navigateToCampus = async (campus) => {
-  await page.goto(`https://app.jointherealworld.com/chat${campuses[campus]}`);
+const navigateToCampus = async (campus, chat) => {
+  await page.goto(`https://app.jointherealworld.com/chat${campuses[campus][chat]}`);
   await new Promise((resolve) => setTimeout(resolve, 5000));
 };
 
@@ -52,7 +57,7 @@ const getRandomCity = async () => {
 };
 
 const postTravelPic = async () => {
-  await navigateToCampus("travel");
+  await navigateToCampus("main", "travel");
   const city = await getRandomCity();
   const url = await getImage(`${city}+sightseeing`);
   const image = await (await fetch(url)).arrayBuffer();
@@ -67,7 +72,7 @@ const postTravelPic = async () => {
 };
 
 const sayGM = async () => {
-  await navigateToCampus("gm");
+  await navigateToCampus("main", "gm");
   await page.type("#chat-input", "GM");
   await page.keyboard.press("Enter");
 };
