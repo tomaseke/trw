@@ -84,6 +84,7 @@ const main = async () => {
   await postTravelPic();
   await wait(5000);
   await sayGM();
+  await page.close();
 };
 
 await main();
