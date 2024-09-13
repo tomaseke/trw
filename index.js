@@ -13,7 +13,6 @@ const campuses = {
     gm: "/01GW4K82142Y9A465QDA3C7P44/01J1W6Z92FJPQQMPWHC2G16SWF"
   }
 };
-
   
 const wait = async (s) => new Promise((resolve) => setTimeout(resolve, s));
 
