@@ -82,9 +82,9 @@ const sayGM = async () => {
 const main = async () => {
   await login();
   await postTravelPic();
-  await wait(15000);
+  await wait(30000);
   await sayGM();
-  await wait(15000);
+  await wait(30000);
   await page.close();
 };
 

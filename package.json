@@ -20,6 +20,7 @@
   "dependencies": {
     "dotenv": "^16.4.5",
     "groq-sdk": "^0.7.0",
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "puppeteer": "^23.4.1"
   }
 }
